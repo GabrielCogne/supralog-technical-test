@@ -68,8 +68,10 @@ classDiagram
 #### Register a user
 ##### Route
 ```
-POST /users/register
+POST /users/register?unfold=false
 ```
+##### Parameters
+* `unfold` If true, returns user details, otherwise, it returns its id. Default value is false
 ##### Accepted data type
 ```json
 {
@@ -87,7 +89,24 @@ POST /users/register
 }
 ```
 ##### Return type
-On success, the call should return the user id with the http code `CREATED` (201)
+On success, the call should return with the http code `CREATED` (201).
+If `unfold` is set to `true`, it will return this:
+```json
+{
+  "id": 0,
+  "email": "",
+  "name": "",
+  "dateOfBirth": "2022-06-06",
+  "address": {
+	"country": "",
+	"city": "",
+	"street": ""
+  },
+  "phoneNumber": null,
+  "description": null
+}
+```
+Otherwise, it will return the user ID.
 
 ##### Potential errors
 If the person is not an adult, or it doesn't live in France, the call should
@@ -96,14 +115,14 @@ return `BAD_REQUEST` (400).
 #### Get a user details
 #### Route
 ```
-GET /users/{id}?nullable=false
+GET /users/{id}
 ```
 ##### Parameters
 * `id` describe the user we want to see
-* `nullable` should null fields be set in the result
 ##### Return type
 ```json
 {
+  "id": 0,
   "email": "",
   "name": "",
   "dateOfBirth": "2022-06-06",

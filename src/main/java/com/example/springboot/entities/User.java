@@ -8,14 +8,18 @@ public class User {
 
 	private final String name;
 	private final String email;
+
+	private final String password;
+
 	private final Calendar dateOfBrith;
 	private final Address address;
 	private String phoneNumber;
 	private String description;
 
-	public User(String name, String email, Calendar dateOfBrith, Address address) {
+	public User(String name, String email, String password, Calendar dateOfBrith, Address address) {
 		this.name = name;
 		this.email = email;
+		this.password = password;
 		this.dateOfBrith = dateOfBrith;
 		this.address = address;
 	}

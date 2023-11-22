@@ -31,6 +31,7 @@ public class UserFinderTest {
 		User frenchAdult = new User(
 				"Olivier",
 				"olivier.levasseur@something.ex",
+				"****",
 				getDateYearsAgo(18),
 				getAddressIn("France")
 		);
@@ -45,6 +46,7 @@ public class UserFinderTest {
 				new User(
 						"Olivier",
 						"olivier.levasseur@something.ex",
+						"****",
 						getDateYearsAgo(18),
 						getAddressIn("France")
 				),

@@ -1,9 +1,11 @@
 package com.example.springboot.controllers.dto;
 
+import com.example.springboot.entities.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class UserRegistryDto {
@@ -38,5 +40,14 @@ public class UserRegistryDto {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", description='" + description + '\'' +
                 '}';
+    }
+
+    public User toObject() {
+        Calendar dateOfBirth = Calendar.getInstance();
+        dateOfBirth.setTime(this.dateOfBirth);
+        User result = new User(name, email, password, dateOfBirth, address.toObject());
+        result.setPhoneNumber(phoneNumber);
+        result.setDescription(description);
+        return result;
     }
 }

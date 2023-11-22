@@ -44,6 +44,7 @@ public class UserRegistryTest {
 		User frenchAdult = new User(
 				"Olivier",
 				"olivier.levasseur@something.ex",
+				"****",
 				getDateYearsAgo(18),
 				getAddressIn("France")
 		);
@@ -55,6 +56,7 @@ public class UserRegistryTest {
 		User notAdultPerson = new User(
 				"Olivier",
 				"olivier.levasseur@something.ex",
+				"****",
 				getDateYearsAgo(17),
 				getAddressIn("France")
 		);
@@ -66,6 +68,7 @@ public class UserRegistryTest {
 		User notFrenchPerson = new User(
 				"Henri",
 				"henri.morgan@something.ex",
+				"****",
 				getDateYearsAgo(18),
 				getAddressIn("Wales")
 		);
