@@ -3,9 +3,12 @@ package com.example.springboot.controllers;
 import com.example.springboot.controllers.dto.ErrorDto;
 import com.example.springboot.entities.Address;
 import com.example.springboot.exceptions.NoSuchUserException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.springboot.controllers.dto.UserDetailDto;
@@ -15,6 +18,7 @@ import com.example.springboot.interfaces.UserFinder;
 import com.example.springboot.interfaces.UserRegistry;
 
 import java.util.Calendar;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -35,9 +39,16 @@ public class UserController {
 		return new ErrorDto(e.getMessage());
 	}
 
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler({MethodArgumentNotValidException.class})
+	public ErrorDto handleValidationError(MethodArgumentNotValidException e) {
+		return new ErrorDto("Validation errors: " +
+				e.getFieldErrors().stream().map(FieldError::getDefaultMessage).collect(Collectors.joining(", ")));
+	}
+
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
-	public int registerUser(@RequestBody UserRegistryDto userDto) throws Exception {
+	public int registerUser(@Valid @RequestBody UserRegistryDto userDto) throws Exception {
 		Calendar dateOfBirth = Calendar.getInstance();
 		dateOfBirth.setTime(userDto.dateOfBirth);
 		return registry.registerUser(
