@@ -10,4 +10,9 @@ public class ErrorDto {
 	public String getError() {
 		return error;
 	}
+
+	@Override
+	public String toString() {
+		return "ErrorDto (" + error + ")";
+	}
 }

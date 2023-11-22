@@ -26,4 +26,17 @@ public class UserRegistryDto {
     public String phoneNumber;
 
     public String description;
+
+    @Override
+    public String toString() {
+        return "UserRegistryDto{" +
+                "name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", address=" + address +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

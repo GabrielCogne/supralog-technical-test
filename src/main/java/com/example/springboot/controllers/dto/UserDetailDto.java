@@ -12,4 +12,11 @@ public class UserDetailDto {
     public String getName() {
         return name;
     }
+
+    @Override
+    public String toString() {
+        return "UserDetailDto{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

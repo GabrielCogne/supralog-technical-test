@@ -3,6 +3,7 @@ package com.example.springboot.controllers;
 import com.example.springboot.controllers.dto.ErrorDto;
 import com.example.springboot.entities.Address;
 import com.example.springboot.exceptions.NoSuchUserException;
+import com.example.springboot.exceptions.UnauthorizedUserCreationException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,12 @@ public class UserController {
 	public ErrorDto handleValidationError(MethodArgumentNotValidException e) {
 		return new ErrorDto("Validation errors: " +
 				e.getFieldErrors().stream().map(FieldError::getDefaultMessage).collect(Collectors.joining(", ")));
+	}
+
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler({UnauthorizedUserCreationException.class})
+	public ErrorDto handleUserRegistryException(UnauthorizedUserCreationException e) {
+		return new ErrorDto(e.getMessage());
 	}
 
 	@PostMapping("/register")
