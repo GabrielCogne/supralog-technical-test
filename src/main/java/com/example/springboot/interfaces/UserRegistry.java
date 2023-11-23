@@ -2,6 +2,8 @@ package com.example.springboot.interfaces;
 
 import com.example.springboot.entities.User;
 
+import java.math.BigInteger;
+
 public interface UserRegistry {
-    int registerUser(User user) throws Exception;
+    Object registerUser(User user, boolean unfold) throws Exception;
 }

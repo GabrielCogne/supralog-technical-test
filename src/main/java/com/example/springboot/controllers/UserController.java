@@ -17,6 +17,7 @@ import com.example.springboot.entities.User;
 import com.example.springboot.interfaces.UserFinder;
 import com.example.springboot.interfaces.UserRegistry;
 
+import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.stream.Collectors;
 
@@ -55,23 +56,14 @@ public class UserController {
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<?> registerUser(@RequestParam(value = "unfold", required = false) boolean unfold, @Valid @RequestBody UserRegistryDto userDto) throws Exception {
-		int id = registry.registerUser(userDto.toObject());
-		if (unfold) {
-			return new ResponseEntity<>(userDictionary.getUserDetails(id), HttpStatus.CREATED);
-		}
-		return new ResponseEntity<>(id, HttpStatus.CREATED);
+		return new ResponseEntity<>(registry.registerUser(userDto.toObject(), unfold), HttpStatus.CREATED);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<User> getUser(@PathVariable("id") int userId) throws NoSuchUserException {
+	public ResponseEntity<User> getUser(@PathVariable("id") BigInteger userId) throws NoSuchUserException {
 		return new ResponseEntity<>(
 				userDictionary.getUserDetails(userId),
 				HttpStatus.OK
 		);
-	}
-
-	@GetMapping()
-	public ResponseEntity<String> get() {
-		return new ResponseEntity<>("Hello World !", HttpStatus.OK);
 	}
 }

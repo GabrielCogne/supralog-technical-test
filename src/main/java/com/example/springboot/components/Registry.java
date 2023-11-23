@@ -3,40 +3,31 @@ package com.example.springboot.components;
 import com.example.springboot.entities.Address;
 import com.example.springboot.exceptions.NoSuchUserException;
 import com.example.springboot.exceptions.UnauthorizedUserCreationException;
+import com.example.springboot.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.example.springboot.entities.User;
 import com.example.springboot.interfaces.UserFinder;
 import com.example.springboot.interfaces.UserRegistry;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.regex.Pattern;
 
 @Component
 public class Registry implements UserRegistry, UserFinder {
     private static final Pattern francePattern = Pattern.compile("^[Ff][Rr]([Aa][Nn][Cc][Ee])?$");
 
-    private final List<User> users;
-
-    public Registry() {
-        users = new ArrayList<>();
-    }
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * Check if the dateOfBirth matches an adult person
      */
-    private boolean isAdult(Calendar dateOfBirth) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(new Date());
-        c.add(Calendar.YEAR, -18);
-        return dateOfBirth.before(c) || (
-                dateOfBirth.get(Calendar.YEAR) == c.get(Calendar.YEAR) &&
-                        dateOfBirth.get(Calendar.MONTH) == c.get(Calendar.MONTH) &&
-                        dateOfBirth.get(Calendar.DAY_OF_MONTH) == c.get(Calendar.DAY_OF_MONTH)
-                );
+    private boolean isAdult(LocalDate dateOfBirth) {
+        LocalDate majorityBirthday = LocalDate.now().minusYears(18);
+        return dateOfBirth.isBefore(majorityBirthday) || dateOfBirth.isEqual(majorityBirthday);
     }
 
     /**
@@ -53,15 +44,14 @@ public class Registry implements UserRegistry, UserFinder {
      * @throws UnauthorizedUserCreationException The age is below eighteen or the address is not in France
      */
     @Override
-    public int registerUser(User user) throws UnauthorizedUserCreationException {
+    public Object registerUser(User user, boolean unfold) throws UnauthorizedUserCreationException {
         if (!isAdult(user.getDateOfBrith()))
             throw new UnauthorizedUserCreationException("The user should be an adult");
         else if (!isFrench(user.getAddress()))
             throw new UnauthorizedUserCreationException("The user should live in France");
 
-        users.add(user);
-        user.setId(users.stream().map(User::getId).max(Integer::compareTo).get() + 1);
-        return user.getId();
+        userRepository.save(user);
+        return unfold ? user : user.getId();
     }
 
     /**
@@ -70,7 +60,7 @@ public class Registry implements UserRegistry, UserFinder {
      * @throws NoSuchUserException The user was not found in the system
      */
     @Override
-    public User getUserDetails(int id) throws NoSuchUserException {
-        return users.stream().filter(user -> user.getId() == id).findFirst().orElseThrow(NoSuchUserException::new);
+    public User getUserDetails(BigInteger id) throws NoSuchUserException {
+        return userRepository.findById(id).orElseThrow(NoSuchUserException::new);
     }
 }

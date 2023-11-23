@@ -4,18 +4,25 @@ import com.example.springboot.entities.Address;
 import com.example.springboot.entities.User;
 import com.example.springboot.exceptions.UnauthorizedUserCreationException;
 import com.example.springboot.interfaces.UserRegistry;
+import com.example.springboot.repositories.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class UserRegistryTest {
+
+	@MockBean
+	private UserRepository repository;
 
 	@Autowired
 	private UserRegistry userRegistry;
@@ -24,11 +31,8 @@ public class UserRegistryTest {
 	 * Return a date that is {years} before today
 	 * @param years Time (in years) before today
 	 */
-	static Calendar getDateYearsAgo(int years) {
-		Calendar c = Calendar.getInstance();
-		c.setTime(new Date());
-		c.add(Calendar.YEAR, -years);
-		return c;
+	static LocalDate getDateYearsAgo(int years) {
+		return LocalDate.now().minusYears(years);
 	}
 
 	/**
@@ -37,6 +41,11 @@ public class UserRegistryTest {
 	 */
 	static Address getAddressIn(String country) {
 		return new Address(country, "", "");
+	}
+
+	@BeforeEach
+	void setup() {
+		when(repository.save(ArgumentMatchers.any(User.class))).then(invocationOnMock -> invocationOnMock.getArgument(0));
 	}
 
 	@Test
@@ -48,7 +57,7 @@ public class UserRegistryTest {
 				getDateYearsAgo(18),
 				getAddressIn("France")
 		);
-		assertDoesNotThrow(() -> userRegistry.registerUser(frenchAdult));
+		assertDoesNotThrow(() -> userRegistry.registerUser(frenchAdult, false));
 	}
 
 	@Test
@@ -60,7 +69,7 @@ public class UserRegistryTest {
 				getDateYearsAgo(17),
 				getAddressIn("France")
 		);
-		assertThrows(UnauthorizedUserCreationException.class, () -> userRegistry.registerUser(notAdultPerson));
+		assertThrows(UnauthorizedUserCreationException.class, () -> userRegistry.registerUser(notAdultPerson, false));
 	}
 
 	@Test
@@ -72,6 +81,6 @@ public class UserRegistryTest {
 				getDateYearsAgo(18),
 				getAddressIn("Wales")
 		);
-		assertThrows(UnauthorizedUserCreationException.class, () -> userRegistry.registerUser(notFrenchPerson));
+		assertThrows(UnauthorizedUserCreationException.class, () -> userRegistry.registerUser(notFrenchPerson, false));
 	}
 }

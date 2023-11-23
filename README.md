@@ -16,24 +16,28 @@ This application allows to register users and to display the details of a regist
 * [Java Development Kit 21+](https://www.oracle.com/fr/java/technologies/downloads/)
 * [Maven](https://maven.apache.org/download.cgi)
 
-This project uses [Spring Boot](https://spring.io/projects/spring-boot) framework.
+* [Docker](https://www.docker.com/) which is optionally if MongoDB is installed
+
+This project uses [Spring Boot](https://spring.io/projects/spring-boot) framework along with [MongoDB](https://www.mongodb.com).
 
 ## How to launch the project
-You can either start the project directly using this command :
+With Docker, which will also run the database, you can use the following command:
 ```zsh
-mvnw spring-boot:run
+docker-compose up
 ```
 
-Or you can run the test, create a jar file and use it to run the project.
+> :warning: If you use Docker, you may need to use `docker-compose down` to shut down and delete the running container.
+
+
+Without Docker, you can use `./mvnw` to run the project using the following command:
 ```zsh
-# Test and create the jar file
-mvn clean package
-
-# Run the jar file
-java -jar supralog-technical-test-0.0.1-SNAPSHOT.jar
+./mvnw clean spring-boot:run
 ```
+Also, inside the [src/main/resources/application.properties](src/main/resources/application.properties) file, you will
+need to change `spring.data.mongodb.host` from `database` to `localhost`.
 
-Once the application is launched, you can connect to [http://localhost:8080/](http://localhost:8080) to check the routes
+Once the application is launched, you can connect to [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+to access the REST API documentation.
 
 ## Architecture and Conception
 ### 1. Business objects

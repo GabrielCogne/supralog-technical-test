@@ -5,8 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class UserRegistryDto {
     @NotBlank(message = "name should not be blank")
@@ -20,7 +19,7 @@ public class UserRegistryDto {
     public String password;
 
     @NotNull(message = "dateOfBirth should not be null")
-    public Date dateOfBirth;
+    public LocalDate dateOfBirth;
 
     @NotNull(message = "address should not be null")
     public AddressDto address;
@@ -43,8 +42,6 @@ public class UserRegistryDto {
     }
 
     public User toObject() {
-        Calendar dateOfBirth = Calendar.getInstance();
-        dateOfBirth.setTime(this.dateOfBirth);
         User result = new User(name, email, password, dateOfBirth, address.toObject());
         result.setPhoneNumber(phoneNumber);
         result.setDescription(description);

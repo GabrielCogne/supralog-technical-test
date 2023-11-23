@@ -1,22 +1,26 @@
 package com.example.springboot.entities;
 
-import java.util.Calendar;
+import org.springframework.data.annotation.Id;
+
+import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class User {
-	private int id;
+	@Id
+	private BigInteger id;
 
 	private final String name;
 	private final String email;
 
 	private final String password;
 
-	private final Calendar dateOfBrith;
+	private final LocalDate dateOfBrith;
 	private final Address address;
 	private String phoneNumber;
 	private String description;
 
-	public User(String name, String email, String password, Calendar dateOfBrith, Address address) {
+	public User(String name, String email, String password, LocalDate dateOfBrith, Address address) {
 		this.name = name;
 		this.email = email;
 		this.password = password;
@@ -24,7 +28,7 @@ public class User {
 		this.address = address;
 	}
 
-	public int getId() {
+	public BigInteger getId() {
 		return id;
 	}
 
@@ -36,7 +40,7 @@ public class User {
 		return email;
 	}
 
-	public Calendar getDateOfBrith() {
+	public LocalDate getDateOfBrith() {
 		return dateOfBrith;
 	}
 
@@ -52,26 +56,12 @@ public class User {
 		return phoneNumber;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
-	}
-
-	/**
-	 * @param date Another user date of birth as Calendar
-	 * @return Is the other user born the same year, month and day of the month
-	 */
-	private boolean isBornTheSameDay(Calendar date) {
-		return dateOfBrith.get(Calendar.YEAR) == date.get(Calendar.YEAR) &&
-				dateOfBrith.get(Calendar.MONTH) == date.get(Calendar.MONTH) &&
-				dateOfBrith.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH);
 	}
 
 	@Override
@@ -81,7 +71,7 @@ public class User {
 		User user = (User) o;
 		return Objects.equals(name, user.name) &&
 				Objects.equals(email, user.email) &&
-				isBornTheSameDay(user.dateOfBrith) &&
+				Objects.equals(dateOfBrith, user.dateOfBrith) &&
 				Objects.equals(address, user.address) &&
 				Objects.equals(phoneNumber, user.phoneNumber) &&
 				Objects.equals(description, user.description);
