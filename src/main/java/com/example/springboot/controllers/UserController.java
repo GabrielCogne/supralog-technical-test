@@ -34,12 +34,18 @@ public class UserController {
 	@Autowired
 	UserFinder userDictionary;
 
+	/**
+	 * Create an ErrorDto for a NoSuchUserException.
+	 */
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@ExceptionHandler({NoSuchUserException.class})
 	public ErrorDto handleNoFoundUserException(NoSuchUserException e) {
 		return new ErrorDto(e.getMessage());
 	}
 
+	/**
+	 * Create an ErrorDto for validation errors raised during parameter or body parsing.
+	 */
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler({MethodArgumentNotValidException.class})
 	public ErrorDto handleValidationError(MethodArgumentNotValidException e) {
@@ -47,18 +53,27 @@ public class UserController {
 				e.getFieldErrors().stream().map(FieldError::getDefaultMessage).collect(Collectors.joining(", ")));
 	}
 
+	/**
+	 * Create an ErrorDto if a user can't be registered
+	 */
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler({UnauthorizedUserCreationException.class})
 	public ErrorDto handleUserRegistryException(UnauthorizedUserCreationException e) {
 		return new ErrorDto(e.getMessage());
 	}
 
+	/**
+	 * Register a user
+	 */
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<?> registerUser(@RequestParam(value = "unfold", required = false) boolean unfold, @Valid @RequestBody UserRegistryDto userDto) throws Exception {
 		return new ResponseEntity<>(registry.registerUser(userDto.toObject(), unfold), HttpStatus.CREATED);
 	}
 
+	/**
+	 * Get user details
+	 */
 	@GetMapping("/{id}")
 	public ResponseEntity<User> getUser(@PathVariable("id") BigInteger userId) throws NoSuchUserException {
 		return new ResponseEntity<>(

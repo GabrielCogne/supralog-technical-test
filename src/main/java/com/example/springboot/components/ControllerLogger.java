@@ -13,9 +13,18 @@ import java.util.Arrays;
 public class ControllerLogger {
 	private static final Logger LOG = LoggerFactory.getLogger(ControllerLogger.class);
 
+	/**
+	 * Allow logTimeTaken(...) to be run when a public function is called.
+	 */
 	@Pointcut("execution(public * com.example.springboot..*(..))")
 	private void allControllerMethods() {}
 
+	/**
+	 * Wrap the execution of a function to add log before execution and after execution
+	 * @param pjp The JoinPoint that represent the public function wrapped
+	 * @return The result of the wrapped function
+	 * @throws Throwable Throw any Exception coming from the wrapped function
+	 */
 	@Around("allControllerMethods()")
 	public Object logTimeTaken(ProceedingJoinPoint pjp) throws Throwable {
 		long startTime = System.currentTimeMillis();

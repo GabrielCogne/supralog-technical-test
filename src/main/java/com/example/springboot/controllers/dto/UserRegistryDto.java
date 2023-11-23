@@ -41,6 +41,9 @@ public class UserRegistryDto {
                 '}';
     }
 
+    /**
+     * Transform the dto into a User
+     */
     public User toObject() {
         User result = new User(name, email, password, dateOfBirth, address.toObject());
         result.setPhoneNumber(phoneNumber);

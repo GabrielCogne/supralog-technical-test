@@ -17,8 +17,14 @@ import java.util.regex.Pattern;
 
 @Component
 public class Registry implements UserRegistry, UserFinder {
-    private static final Pattern francePattern = Pattern.compile("^[Ff][Rr]([Aa][Nn][Cc][Ee])?$");
+    /**
+     * A pattern to detect if a string matches "France" or "FR"
+     */
+    private static final Pattern FRANCE_PATTERN = Pattern.compile("^[Ff][Rr]([Aa][Nn][Cc][Ee])?$");
 
+    /**
+     * Access to the user database
+     */
     @Autowired
     private UserRepository userRepository;
 
@@ -34,7 +40,7 @@ public class Registry implements UserRegistry, UserFinder {
      * Check if the address matches a person living in France
      */
     private boolean isFrench(Address address) {
-        return francePattern.matcher(address.getCountry()).matches();
+        return FRANCE_PATTERN.matcher(address.getCountry()).matches();
     }
 
     /**
