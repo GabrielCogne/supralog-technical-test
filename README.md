@@ -7,7 +7,7 @@ This application allows to register users and to display the details of a regist
 * [Requirements](#requirements)
 * [How to launch the project](#how-to-launch-the-project)
 * [Architecture and Conception](#architecture-and-conception)
-* [Potential improvement](#potential-improvement)
+* [Potential improvements](#potential-improvements)
 
 
 ## Contributor
