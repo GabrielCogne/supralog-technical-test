@@ -3,11 +3,11 @@ package com.example.springboot.controllers.dto;
 import com.example.springboot.entities.Address;
 import jakarta.validation.constraints.NotBlank;
 
-public record AddressDto (@NotBlank(message = "country should not be blank") String country, String city, String street) {
+public record AddressDto (@NotBlank(message = "country should not be blank") String country, String city, String street, String zipCode) {
 	/**
 	 * Transform the dto into an Address
 	 */
 	public Address toObject() {
-		return new Address(country, city, street);
+		return new Address(country, city, street, zipCode);
 	}
 }

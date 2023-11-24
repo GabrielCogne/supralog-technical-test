@@ -1,6 +1,7 @@
 package com.example.springboot.components;
 
 import com.example.springboot.entities.Address;
+import com.example.springboot.exceptions.DuplicatedUserException;
 import com.example.springboot.exceptions.NoSuchUserException;
 import com.example.springboot.exceptions.UnauthorizedUserCreationException;
 import com.example.springboot.repositories.UserRepository;
@@ -50,11 +51,13 @@ public class Registry implements UserRegistry, UserFinder {
      * @throws UnauthorizedUserCreationException The age is below eighteen or the address is not in France
      */
     @Override
-    public Object registerUser(User user, boolean unfold) throws UnauthorizedUserCreationException {
+    public Object registerUser(User user, boolean unfold) throws UnauthorizedUserCreationException, DuplicatedUserException {
         if (!isAdult(user.getDateOfBrith()))
             throw new UnauthorizedUserCreationException("The user should be an adult");
         else if (!isFrench(user.getAddress()))
             throw new UnauthorizedUserCreationException("The user should live in France");
+        else if (userRepository.existsByEmail(user.getEmail()))
+            throw new DuplicatedUserException();
 
         userRepository.save(user);
         return unfold ? user : user.getId();

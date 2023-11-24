@@ -46,7 +46,7 @@ public class UserControllerTest {
 		testUser.email = "olivier.levasseur@something.ex";
 		testUser.password = "****";
 		testUser.dateOfBirth = LocalDate.of(1965, 11, 5);
-		testUser.address = new AddressDto("France", "", "");
+		testUser.address = new AddressDto("France", "", "", "");
 	}
 
 	@Test
@@ -63,7 +63,7 @@ public class UserControllerTest {
 	@Test
 	void registrationFailureDueToAge() throws Exception {
 		testUser.dateOfBirth = LocalDate.now().minusYears(17);
-		testUser.address = new AddressDto("France", "", "");
+		testUser.address = new AddressDto("France", "", "", "");
 		mockMvc.perform(
 						MockMvcRequestBuilders.post(UserController.BASE_URL + "/register")
 								.contentType(MediaType.APPLICATION_JSON)
@@ -74,7 +74,7 @@ public class UserControllerTest {
 	@Test
 	void registrationFailureDueToAddress() throws Exception {
 		testUser.dateOfBirth = LocalDate.of(1965, 11, 5);
-		testUser.address = new AddressDto("England", "", "");
+		testUser.address = new AddressDto("England", "", "", "");
 		mockMvc.perform(
 						MockMvcRequestBuilders.post(UserController.BASE_URL + "/register")
 								.contentType(MediaType.APPLICATION_JSON)

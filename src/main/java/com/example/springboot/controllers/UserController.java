@@ -2,6 +2,7 @@ package com.example.springboot.controllers;
 
 import com.example.springboot.controllers.dto.ErrorDto;
 import com.example.springboot.entities.Address;
+import com.example.springboot.exceptions.DuplicatedUserException;
 import com.example.springboot.exceptions.NoSuchUserException;
 import com.example.springboot.exceptions.UnauthorizedUserCreationException;
 import jakarta.validation.Valid;
@@ -59,6 +60,12 @@ public class UserController {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler({UnauthorizedUserCreationException.class})
 	public ErrorDto handleUserRegistryException(UnauthorizedUserCreationException e) {
+		return new ErrorDto(e.getMessage());
+	}
+
+	@ResponseStatus(HttpStatus.CONFLICT)
+	@ExceptionHandler({DuplicatedUserException.class})
+	public ErrorDto handleUserRegistryDuplicationException(DuplicatedUserException e) {
 		return new ErrorDto(e.getMessage());
 	}
 

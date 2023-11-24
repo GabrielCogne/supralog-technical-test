@@ -40,7 +40,7 @@ public class UserRegistryTest {
 	 * @param country the country of residence
 	 */
 	static Address getAddressIn(String country) {
-		return new Address(country, "", "");
+		return new Address(country, "", "", "");
 	}
 
 	@BeforeEach

@@ -7,10 +7,13 @@ public class Address {
 	private final String city;
 	private final String street;
 
-	public Address(String country, String city, String street) {
+	private final String zipCode;
+
+	public Address(String country, String city, String street, String zipCode) {
 		this.country = country;
 		this.city = city;
 		this.street = street;
+		this.zipCode = zipCode;
 	}
 
 	public String getCountry() {
@@ -23,6 +26,10 @@ public class Address {
 
 	public String getStreet() {
 		return street;
+	}
+
+	public String getZipCode() {
+		return zipCode;
 	}
 
 	@Override

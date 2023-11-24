@@ -3,11 +3,9 @@ package com.example.springboot.components;
 import com.example.springboot.entities.User;
 import com.example.springboot.exceptions.NoSuchUserException;
 import com.example.springboot.interfaces.UserFinder;
-import com.example.springboot.interfaces.UserRegistry;
 import com.example.springboot.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatcher;
 import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +16,6 @@ import java.util.Optional;
 
 import static com.example.springboot.components.UserRegistryTest.getAddressIn;
 import static com.example.springboot.components.UserRegistryTest.getDateYearsAgo;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;

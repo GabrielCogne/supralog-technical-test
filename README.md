@@ -7,6 +7,7 @@ This application allows to register users and to display the details of a regist
 * [Requirements](#requirements)
 * [How to launch the project](#how-to-launch-the-project)
 * [Architecture and Conception](#architecture-and-conception)
+* [Potential improvement](#potential-improvement)
 
 
 ## Contributor
@@ -43,7 +44,7 @@ to access the REST API documentation.
 ### 1. Business objects
 The first thing to do is to define what are our data. So what's attribute should have our user?
 
-As only adult people who live in France can have an account, we need at least there dateOfBirth, there address, an email,
+As only adult people who live in France can have an account, we need at least their dateOfBirth, their address, an email,
 so they can be authenticated, and eventually a password. A user should also be able to fill in his name or a nickname.
 As optional parameter we could ask for the user phone number or a short description of himself
 
@@ -63,6 +64,7 @@ classDiagram
         - String country
         - String street
         - String city
+        - String zipCode
     }
 
     User --> Address: address
@@ -86,7 +88,8 @@ POST /users/register?unfold=false
   "address": {
 	"country": "",
 	"city": "",
-	"street": ""
+	"street": "",
+	"zipCode": ""
   },
   "phoneNumber": null,
   "description": null
@@ -104,7 +107,8 @@ If `unfold` is set to `true`, it will return this:
   "address": {
 	"country": "",
 	"city": "",
-	"street": ""
+	"street": "",
+	"zipCode": ""
   },
   "phoneNumber": null,
   "description": null
@@ -115,6 +119,9 @@ Otherwise, it will return the user ID.
 ##### Potential errors
 If the person is not an adult, or it doesn't live in France, the call should
 return `BAD_REQUEST` (400).
+
+If the email to be registered belongs to a user inside the database, the call should
+return `CONFLICT` ().
 
 #### Get a user details
 #### Route
@@ -133,7 +140,8 @@ GET /users/{id}
   "address": {
 	"country": "",
 	"city": "",
-	"street": ""
+	"street": "",
+	"zipCode": ""
   },
   "phoneNumber": null,
   "description": null
@@ -158,3 +166,8 @@ interface UserFinder {
 
 As the application only manages users, we could have one component that implements
 both interfaces (use registry and the user detail finder) along with one controller.
+
+## Potential improvements
+Validation is only performed on the user's email. Validation should cover each field and prevent any possible injection.
+
+A user's data should only be sent to him or her, or the system must ask his or her permission before sending it to another person.
