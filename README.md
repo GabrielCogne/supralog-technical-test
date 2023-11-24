@@ -120,8 +120,7 @@ Otherwise, it will return the user ID.
 If the person is not an adult, or it doesn't live in France, the call should
 return `BAD_REQUEST` (400).
 
-If the email to be registered belongs to a user inside the database, the call should
-return `CONFLICT` ().
+If the e-mail address to be registered belongs to a database user, the call must return `CONFLICT` (409).
 
 #### Get a user details
 #### Route
@@ -168,6 +167,10 @@ As the application only manages users, we could have one component that implemen
 both interfaces (use registry and the user detail finder) along with one controller.
 
 ## Potential improvements
+Double-check errors during registration to avoid unintentionally leaking data.
+
 Validation is only performed on the user's email. Validation should cover each field and prevent any possible injection.
 
 A user's data should only be sent to him or her, or the system must ask his or her permission before sending it to another person.
+
+Define and implement a security mode (authentication and authorization).
